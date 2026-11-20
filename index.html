@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Painel ADM | Pura Papelaria</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+
+    tailwind.config = {
+
+      theme: {
+
+        extend: {
+
+          fontFamily: {
+
+            sans: ['"Plus Jakarta Sans"', 'sans-serif']
+
+          },
+
+          colors: {
+
+            brand: {
+
+              gold: '#C5A059',
+
+              bg: '#FAF9F6',
+
+              dark: '#1C1C1C'
+
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+  </script>
+
+</head>
+
+<body class="bg-stone-100 text-brand-dark font-sans min-h-screen flex flex-col">
+
+
+
+  <!-- CABEÇALHO -->
+
+  <header class="bg-brand-dark text-white border-b border-stone-800 shadow-sm sticky top-0 z-40">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center py-3 gap-3">
+
+      <div class="flex items-center gap-3">
+
+        <img src="logo.png" alt="Logo" class="h-8 w-auto bg-white p-1" onerror="this.src='https://via.placeholder.com/32'">
+
+        <h1 class="text-xs font-semibold tracking-widest uppercase text-brand-gold">Painel Administrativo &bull; Pura Papelaria</h1>
+
+      </div>
+
+
+
+      <!-- Navegação em Abas / Páginas -->
+
+      <nav class="flex gap-2">
+
+        <button id="tabProductsBtn" onclick="switchTab('products')" class="px-4 py-2 text-xs uppercase tracking-wider font-semibold rounded transition bg-brand-gold text-black">
+
+          <i class="fa-solid fa-boxes-stacked mr-1.5"></i> Catálogo
+
+        </button>
+
+        <button id="tabOrdersBtn" onclick="switchTab('orders')" class="px-4 py-2 text-xs uppercase tracking-wider font-semibold rounded transition bg-stone-800 text-stone-300 hover:text-white">
+
+          <i class="fa-solid fa-clipboard-list mr-1.5"></i> Pedidos & Anotações
+
+        </button>
+
+      </nav>
+
+
+
+      <a href="index.html" target="_blank" class="bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs py-2 px-3 font-medium transition flex items-center gap-2">
+
+        <span>Ver Loja</span>
+
+        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+
+      </a>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- PÁGINA 1: CATÁLOGO DE PRODUTOS -->
+
+  <main id="pageProducts" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 w-full">
+
+    
+
+    <!-- Formulário de Produto -->
+
+    <div class="bg-white p-6 border border-stone-200/80 lg:col-span-5 shadow-sm h-fit">
+
+      <h2 id="formTitle" class="text-xs uppercase tracking-widest font-bold text-brand-dark mb-6 pb-3 border-b border-stone-200 flex items-center justify-between">
+
+        <span><i class="fa-solid fa-pen-to-square text-brand-gold mr-2"></i> Cadastrar Produto</span>
+
+        <button id="btnCancelEdit" onclick="resetProductForm()" class="text-xs text-red-600 underline hidden">Cancelar Edição</button>
+
+      </h2>
+
+
+
+      <form id="productForm" class="space-y-4">
+
+        <input type="hidden" id="editProductId">
+
+
+
+        <div>
+
+          <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider mb-1">Título do Produto *</label>
+
+          <input type="text" id="title" required class="w-full p-2.5 bg-stone-50 border border-stone-300 text-xs focus:border-brand-gold outline-none" placeholder="Ex: Planner Anual Capa Dura">
+
+        </div>
+
+
+
+        <div class="grid grid-cols-2 gap-3">
+
+          <div>
+
+            <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider mb-1">Preço Base (R$) *</label>
+
+            <input type="number" step="0.01" id="price" required class="w-full p-2.5 bg-stone-50 border border-stone-300 text-xs focus:border-brand-gold outline-none" placeholder="89.90">
+
+          </div>
+
+          <div>
+
+            <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider mb-1">Tag do Produto</label>
+
+            <select id="tag" class="w-full p-2.5 bg-stone-50 border border-stone-300 text-xs focus:border-brand-gold outline-none">
+
+              <option value="">Nenhuma</option>
+
+              <option value="mais pedidos">Mais Pedidos</option>
+
+              <option value="novidade">Novidade</option>
+
+              <option value="esgotado">Esgotado</option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+
+        <div>
+
+          <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider mb-1">Categoria *</label>
+
+          <input type="text" id="category" required class="w-full p-2.5 bg-stone-50 border border-stone-300 text-xs focus:border-brand-gold outline-none" placeholder="Ex: Planners, Escrita, Cadernos...">
+
+        </div>
+
+
+
+        <div>
+
+          <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider mb-1">Descrição do Produto</label>
+
+          <textarea id="description" rows="3" class="w-full p-2.5 bg-stone-50 border border-stone-300 text-xs focus:border-brand-gold outline-none" placeholder="Especificações técnicas..."></textarea>
+
+        </div>
+
+
+
+        <!-- VARIAÇÕES AVANÇADAS COM PREÇO E FOTO INDEPENDENTES -->
+
+        <div class="border-t border-stone-200 pt-3">
+
+          <div class="flex justify-between items-center mb-2">
+
+            <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider">Variações (Preço e Foto por Variação)</label>
+
+            <button type="button" onclick="addVariationRow()" class="text-[10px] bg-stone-800 text-white px-2 py-1 font-semibold uppercase tracking-wider hover:bg-brand-gold hover:text-black transition">+ Adicionar</button>
+
+          </div>
+
+          <div id="variationsContainer" class="space-y-2"></div>
+
+        </div>
+
+
+
+        <!-- FOTOS PRINCIPAIS -->
+
+        <div class="space-y-2 border-t border-stone-200 pt-3">
+
+          <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider">URLs das Fotos Gerais (Até 5 Fotos)</label>
+
+          <input type="url" id="img1" class="w-full p-2 bg-stone-50 border border-stone-300 text-[11px] outline-none focus:border-brand-gold" placeholder="URL da Foto 1 (Principal)">
+
+          <input type="url" id="img2" class="w-full p-2 bg-stone-50 border border-stone-300 text-[11px] outline-none focus:border-brand-gold" placeholder="URL da Foto 2">
+
+          <input type="url" id="img3" class="w-full p-2 bg-stone-50 border border-stone-300 text-[11px] outline-none focus:border-brand-gold" placeholder="URL da Foto 3">
+
+          <input type="url" id="img4" class="w-full p-2 bg-stone-50 border border-stone-300 text-[11px] outline-none focus:border-brand-gold" placeholder="URL da Foto 4">
+
+          <input type="url" id="img5" class="w-full p-2 bg-stone-50 border border-stone-300 text-[11px] outline-none focus:border-brand-gold" placeholder="URL da Foto 5">
+
+        </div>
+
+
+
+        <button type="submit" id="btnSave" class="w-full bg-brand-dark hover:bg-brand-gold text-white font-medium py-3 text-xs uppercase tracking-widest transition flex items-center justify-center gap-2 mt-4">
+
+          <i class="fa-solid fa-check"></i> Salvar Produto
+
+        </button>
+
+      </form>
+
+    </div>
+
+
+
+    <!-- Lista de Produtos -->
+
+    <div class="bg-white p-6 border border-stone-200/80 lg:col-span-7 shadow-sm">
+
+      <h2 class="text-xs uppercase tracking-widest font-bold text-brand-dark mb-6 pb-3 border-b border-stone-200">Itens Ativos no Site</h2>
+
+      <div id="adminProductsList" class="space-y-3">
+
+        <p class="text-stone-400 text-center py-8 text-xs">Sincronizando com o banco...</p>
+
+      </div>
+
+    </div>
+
+
+
+  </main>
+
+
+
+  <!-- PÁGINA 2: PEDIDOS & ANOTAÇÕES MANUAIS -->
+
+  <main id="pageOrders" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 w-full hidden">
+
+    
+
+    <!-- Formulário de Pedidos -->
+
+    <div class="bg-white p-6 border border-stone-200/80 lg:col-span-5 shadow-sm h-fit">
+
+      <h2 id="orderFormTitle" class="text-xs uppercase tracking-widest font-bold text-brand-dark mb-6 pb-3 border-b border-stone-200 flex items-center justify-between">
+
+        <span><i class="fa-solid fa-cart-plus text-brand-gold mr-2"></i> Novo Registro de Pedido</span>
+
+        <button id="btnCancelOrderEdit" onclick="resetOrderForm()" class="text-xs text-red-600 underline hidden">Cancelar Edição</button>
+
+      </h2>
+
+
+
+      <form id="orderForm" class="space-y-4">
+
+        <input type="hidden" id="editOrderId">
+
+
+
+        <div>
+
+          <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider mb-1">Nome do Cliente *</label>
+
+          <input type="text" id="orderClientName" required class="w-full p-2.5 bg-stone-50 border border-stone-300 text-xs focus:border-brand-gold outline-none" placeholder="Ex: Maria Oliveira">
+
+        </div>
+
+
+
+        <div>
+
+          <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider mb-1">Itens / Produtos Comprados *</label>
+
+          <textarea id="orderItems" rows="2" required class="w-full p-2.5 bg-stone-50 border border-stone-300 text-xs focus:border-brand-gold outline-none" placeholder="Ex: 1x Caderno B5 Rosa, 2x Caneta Gel Dourada"></textarea>
+
+        </div>
+
+
+
+        <div class="grid grid-cols-2 gap-3">
+
+          <div>
+
+            <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider mb-1">Valor Total (R$) *</label>
+
+            <input type="number" step="0.01" id="orderValue" required class="w-full p-2.5 bg-stone-50 border border-stone-300 text-xs focus:border-brand-gold outline-none" placeholder="129.90">
+
+          </div>
+
+          <div>
+
+            <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider mb-1">Tipo de Envio</label>
+
+            <select id="orderShippingType" class="w-full p-2.5 bg-stone-50 border border-stone-300 text-xs focus:border-brand-gold outline-none">
+
+              <option value="Entrega">Entrega / Correios</option>
+
+              <option value="Retirada">Retirada na Loja</option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+
+        <div>
+
+          <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider mb-1">Status do Pedido</label>
+
+          <select id="orderStatus" class="w-full p-2.5 bg-stone-50 border border-stone-300 text-xs focus:border-brand-gold outline-none">
+
+            <option value="pendente">Pendente</option>
+
+            <option value="em separacao">Em Separação</option>
+
+            <option value="enviado">Enviado</option>
+
+            <option value="entregue">Entregue</option>
+
+          </select>
+
+        </div>
+
+
+
+        <div>
+
+          <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider mb-1">Endereço de Entrega</label>
+
+          <input type="text" id="orderAddress" class="w-full p-2.5 bg-stone-50 border border-stone-300 text-xs focus:border-brand-gold outline-none" placeholder="Rua, Número, Bairro, Cidade">
+
+        </div>
+
+
+
+        <div>
+
+          <label class="block text-[11px] font-semibold text-stone-600 uppercase tracking-wider mb-1">Observações Internas</label>
+
+          <textarea id="orderNotes" rows="2" class="w-full p-2.5 bg-stone-50 border border-stone-300 text-xs focus:border-brand-gold outline-none" placeholder="Anotações de embrulho para presente, pagamento via PIX, etc..."></textarea>
+
+        </div>
+
+
+
+        <button type="submit" id="btnSaveOrder" class="w-full bg-brand-dark hover:bg-brand-gold text-white font-medium py-3 text-xs uppercase tracking-widest transition flex items-center justify-center gap-2">
+
+          <i class="fa-solid fa-floppy-disk"></i> Registrar Pedido
+
+        </button>
+
+      </form>
+
+    </div>
+
+
+
+    <!-- Lista de Pedidos -->
+
+    <div class="bg-white p-6 border border-stone-200/80 lg:col-span-7 shadow-sm">
+
+      <h2 class="text-xs uppercase tracking-widest font-bold text-brand-dark mb-6 pb-3 border-b border-stone-200 flex justify-between items-center">
+
+        <span>Histórico de Pedidos</span>
+
+        <span id="ordersCount" class="text-stone-400 font-normal">0 registrados</span>
+
+      </h2>
+
+      <div id="adminOrdersList" class="space-y-3">
+
+        <p class="text-stone-400 text-center py-8 text-xs">Carregando pedidos...</p>
+
+      </div>
+
+    </div>
+
+
+
+  </main>
+
+
+
+  <!-- Firebase JavaScript -->
+
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyASuEKoSy3tEKH9CRi2tRgcDOKN-1bHnik",
+
+      authDomain: "pura-papelaria.firebaseapp.com",
+
+      databaseURL: "https://pura-papelaria-default-rtdb.firebaseio.com",
+
+      projectId: "pura-papelaria",
+
+      storageBucket: "pura-papelaria.firebasestorage.app",
+
+      messagingSenderId: "82728878088",
+
+      appId: "1:82728878088:web:1f548c438c31ec53b811bd"
+
+    };
+
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getDatabase(app);
+
+
+
+    let currentProducts = {};
+
+    let currentOrders = {};
+
+
+
+    // NAVEGAÇÃO ENTRE ABAS
+
+    window.switchTab = function(tab) {
+
+      const pageProducts = document.getElementById('pageProducts');
+
+      const pageOrders = document.getElementById('pageOrders');
+
+      const btnProducts = document.getElementById('tabProductsBtn');
+
+      const btnOrders = document.getElementById('tabOrdersBtn');
+
+
+
+      if(tab === 'products') {
+
+        pageProducts.classList.remove('hidden');
+
+        pageOrders.classList.add('hidden');
+
+        btnProducts.className = "px-4 py-2 text-xs uppercase tracking-wider font-semibold rounded transition bg-brand-gold text-black";
+
+        btnOrders.className = "px-4 py-2 text-xs uppercase tracking-wider font-semibold rounded transition bg-stone-800 text-stone-300 hover:text-white";
+
+      } else {
+
+        pageProducts.classList.add('hidden');
+
+        pageOrders.classList.remove('hidden');
+
+        btnOrders.className = "px-4 py-2 text-xs uppercase tracking-wider font-semibold rounded transition bg-brand-gold text-black";
+
+        btnProducts.className = "px-4 py-2 text-xs uppercase tracking-wider font-semibold rounded transition bg-stone-800 text-stone-300 hover:text-white";
+
+      }
+
+    };
+
+
+
+    // --- LÓGICA DE PRODUTOS ---
+
+    onValue(ref(db, 'products'), (snapshot) => {
+
+      currentProducts = snapshot.val() || {};
+
+      renderAdminList();
+
+    });
+
+
+
+    window.addVariationRow = function(name = '', price = '', image = '') {
+
+      const container = document.getElementById('variationsContainer');
+
+      const id = Date.now() + Math.random().toString(36).substr(2, 4);
+
+      
+
+      const div = document.createElement('div');
+
+      div.className = "p-2 bg-stone-50 border border-stone-200 rounded space-y-1.5 var-row";
+
+      div.id = `var_${id}`;
+
+      div.innerHTML = `
+
+        <div class="flex gap-1.5">
+
+          <input type="text" placeholder="Nome (Ex: Rosa)" value="${name}" class="var-name p-1.5 text-xs bg-white border border-stone-300 w-1/2 outline-none">
+
+          <input type="number" step="0.01" placeholder="Preço (Opcional)" value="${price}" class="var-price p-1.5 text-xs bg-white border border-stone-300 w-1/2 outline-none">
+
+          <button type="button" onclick="document.getElementById('var_${id}').remove()" class="text-red-500 hover:text-red-700 px-1"><i class="fa-solid fa-xmark"></i></button>
+
+        </div>
+
+        <input type="url" placeholder="URL da Imagem da Variação" value="${image}" class="var-image w-full p-1.5 text-[11px] bg-white border border-stone-300 outline-none">
+
+      `;
+
+      container.appendChild(div);
+
+    };
+
+
+
+    function renderAdminList() {
+
+      const container = document.getElementById('adminProductsList');
+
+      const items = Object.entries(currentProducts);
+
+
+
+      if(items.length === 0) {
+
+        container.innerHTML = '<p class="text-stone-400 text-center py-8 text-xs">Nenhum item cadastrado até o momento.</p>';
+
+        return;
+
+      }
+
+
+
+      container.innerHTML = items.map(([id, p]) => {
+
+        const thumb = (p.images && p.images.length > 0) ? p.images[0] : 'https://via.placeholder.com/80';
+
+        return `
+
+          <div class="flex items-center justify-between p-3 border border-stone-200 hover:border-brand-gold transition gap-3">
+
+            <img src="${thumb}" alt="" class="w-14 h-14 object-cover border border-stone-200 shrink-0" onerror="this.src='https://via.placeholder.com/80?text=Erro'">
+
+            <div class="flex-1 min-w-0">
+
+              <h3 class="font-medium text-xs text-brand-dark truncate">${p.title}</h3>
+
+              <p class="text-[11px] text-stone-500">Cat: <span class="font-semibold text-brand-gold">${p.category}</span> &bull; R$ ${parseFloat(p.price).toFixed(2)}</p>
+
+              ${p.variationsList ? `<p class="text-[10px] text-stone-400">${p.variationsList.length} variação(ões)</p>` : ''}
+
+            </div>
+
+            <div class="flex gap-1 shrink-0">
+
+              <button onclick="editProduct('${id}')" class="p-2 text-stone-600 hover:text-brand-gold transition"><i class="fa-solid fa-pen"></i></button>
+
+              <button onclick="deleteProduct('${id}')" class="p-2 text-stone-400 hover:text-red-600 transition"><i class="fa-solid fa-trash"></i></button>
+
+            </div>
+
+          </div>
+
+        `;
+
+      }).join('');
+
+    }
+
+
+
+    document.getElementById('productForm').addEventListener('submit', async (e) => {
+
+      e.preventDefault();
+
+      
+
+      const btnSave = document.getElementById('btnSave');
+
+      btnSave.disabled = true;
+
+      btnSave.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Gravando...';
+
+
+
+      try {
+
+        const editId = document.getElementById('editProductId').value;
+
+        const title = document.getElementById('title').value;
+
+        const price = parseFloat(document.getElementById('price').value);
+
+        const category = document.getElementById('category').value.trim();
+
+        const tag = document.getElementById('tag').value;
+
+        const description = document.getElementById('description').value;
+
+
+
+        // Variações
+
+        const varRows = document.querySelectorAll('.var-row');
+
+        const variationsList = [];
+
+        varRows.forEach(row => {
+
+          const vName = row.querySelector('.var-name').value.trim();
+
+          const vPrice = row.querySelector('.var-price').value;
+
+          const vImage = row.querySelector('.var-image').value.trim();
+
+          if(vName) {
+
+            variationsList.push({ name: vName, price: vPrice || null, image: vImage || null });
+
+          }
+
+        });
+
+
+
+        // Fotos Gerais
+
+        const imageUrls = [
+
+          document.getElementById('img1').value.trim(),
+
+          document.getElementById('img2').value.trim(),
+
+          document.getElementById('img3').value.trim(),
+
+          document.getElementById('img4').value.trim(),
+
+          document.getElementById('img5').value.trim()
+
+        ].filter(url => url !== '');
+
+
+
+        const productData = {
+
+          title,
+
+          price,
+
+          category,
+
+          tag,
+
+          description,
+
+          variationsList,
+
+          images: imageUrls,
+
+          updatedAt: Date.now()
+
+        };
+
+
+
+        if(editId) {
+
+          await update(ref(db, `products/${editId}`), productData);
+
+        } else {
+
+          await push(ref(db, 'products'), productData);
+
+        }
+
+
+
+        resetProductForm();
+
+        alert('Produto atualizado com sucesso!');
+
+      } catch (err) {
+
+        console.error(err);
+
+        alert('Erro ao gravar: ' + err.message);
+
+      } finally {
+
+        btnSave.disabled = false;
+
+        btnSave.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Produto';
+
+      }
+
+    });
+
+
+
+    window.editProduct = function(id) {
+
+      const p = currentProducts[id];
+
+      if(!p) return;
+
+
+
+      document.getElementById('editProductId').value = id;
+
+      document.getElementById('title').value = p.title;
+
+      document.getElementById('price').value = p.price;
+
+      document.getElementById('category').value = p.category;
+
+      document.getElementById('tag').value = p.tag || '';
+
+      document.getElementById('description').value = p.description || '';
+
+
+
+      document.getElementById('variationsContainer').innerHTML = '';
+
+      if(p.variationsList) {
+
+        p.variationsList.forEach(v => addVariationRow(v.name, v.price || '', v.image || ''));
+
+      }
+
+
+
+      const imgs = p.images || [];
+
+      document.getElementById('img1').value = imgs[0] || '';
+
+      document.getElementById('img2').value = imgs[1] || '';
+
+      document.getElementById('img3').value = imgs[2] || '';
+
+      document.getElementById('img4').value = imgs[3] || '';
+
+      document.getElementById('img5').value = imgs[4] || '';
+
+
+
+      document.getElementById('formTitle').querySelector('span').innerHTML = '<i class="fa-solid fa-pen text-brand-gold mr-2"></i> Editar Produto';
+
+      document.getElementById('btnCancelEdit').classList.remove('hidden');
+
+    };
+
+
+
+    window.deleteProduct = async function(id) {
+
+      if(confirm('Deseja realmente remover este produto do catálogo?')) {
+
+        await remove(ref(db, `products/${id}`));
+
+      }
+
+    };
+
+
+
+    window.resetProductForm = function() {
+
+      document.getElementById('productForm').reset();
+
+      document.getElementById('editProductId').value = '';
+
+      document.getElementById('variationsContainer').innerHTML = '';
+
+      document.getElementById('formTitle').querySelector('span').innerHTML = '<i class="fa-solid fa-pen-to-square text-brand-gold mr-2"></i> Cadastrar Produto';
+
+      document.getElementById('btnCancelEdit').classList.add('hidden');
+
+    };
+
+
+
+    // --- LÓGICA DE PEDIDOS & ANOTAÇÕES MANUAIS ---
+
+    onValue(ref(db, 'orders'), (snapshot) => {
+
+      currentOrders = snapshot.val() || {};
+
+      renderOrdersList();
+
+    });
+
+
+
+    function renderOrdersList() {
+
+      const container = document.getElementById('adminOrdersList');
+
+      const items = Object.entries(currentOrders);
+
+      document.getElementById('ordersCount').innerText = `${items.length} registrados`;
+
+
+
+      if(items.length === 0) {
+
+        container.innerHTML = '<p class="text-stone-400 text-center py-8 text-xs">Nenhum pedido registrado no sistema.</p>';
+
+        return;
+
+      }
+
+
+
+      // Ordenar por data recente
+
+      items.sort((a, b) => (b[1].createdAt || 0) - (a[1].createdAt || 0));
+
+
+
+      container.innerHTML = items.map(([id, o]) => {
+
+        let badgeColor = "bg-yellow-100 text-yellow-800 border-yellow-300";
+
+        if(o.status === 'em separacao') badgeColor = "bg-blue-100 text-blue-800 border-blue-300";
+
+        else if(o.status === 'enviado') badgeColor = "bg-purple-100 text-purple-800 border-purple-300";
+
+        else if(o.status === 'entregue') badgeColor = "bg-emerald-100 text-emerald-800 border-emerald-300";
+
+
+
+        return `
+
+          <div class="p-4 bg-stone-50 border border-stone-200 rounded space-y-2">
+
+            <div class="flex justify-between items-start">
+
+              <div>
+
+                <h3 class="font-bold text-xs text-brand-dark">${o.clientName}</h3>
+
+                <p class="text-[11px] text-stone-500"><i class="fa-solid fa-box text-stone-400 mr-1"></i> ${o.items}</p>
+
+              </div>
+
+              <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 border ${badgeColor}">${o.status}</span>
+
+            </div>
+
+
+
+            <div class="grid grid-cols-2 text-[11px] text-stone-600 border-t border-stone-200/80 pt-2 gap-2">
+
+              <div><strong>Valor:</strong> R$ ${parseFloat(o.value).toFixed(2)}</div>
+
+              <div><strong>Envio:</strong> ${o.shippingType || 'N/I'}</div>
+
+              ${o.address ? `<div class="col-span-2"><strong>Endereço:</strong> ${o.address}</div>` : ''}
+
+              ${o.notes ? `<div class="col-span-2 text-stone-500 italic"><strong>Obs:</strong> ${o.notes}</div>` : ''}
+
+            </div>
+
+
+
+            <div class="flex justify-between items-center border-t border-stone-200/80 pt-2 text-xs">
+
+              <select onchange="updateOrderStatus('${id}', this.value)" class="text-[11px] bg-white border border-stone-300 p-1 rounded">
+
+                <option value="pendente" ${o.status === 'pendente' ? 'selected' : ''}>Status: Pendente</option>
+
+                <option value="em separacao" ${o.status === 'em separacao' ? 'selected' : ''}>Status: Em Separação</option>
+
+                <option value="enviado" ${o.status === 'enviado' ? 'selected' : ''}>Status: Enviado</option>
+
+                <option value="entregue" ${o.status === 'entregue' ? 'selected' : ''}>Status: Entregue</option>
+
+              </select>
+
+
+
+              <div class="flex gap-2">
+
+                <button onclick="editOrder('${id}')" class="text-stone-600 hover:text-brand-gold p-1"><i class="fa-solid fa-pen"></i></button>
+
+                <button onclick="deleteOrder('${id}')" class="text-stone-400 hover:text-red-600 p-1"><i class="fa-solid fa-trash"></i></button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        `;
+
+      }).join('');
+
+    }
+
+
+
+    document.getElementById('orderForm').addEventListener('submit', async (e) => {
+
+      e.preventDefault();
+
+
+
+      const editId = document.getElementById('editOrderId').value;
+
+      const clientName = document.getElementById('orderClientName').value.trim();
+
+      const items = document.getElementById('orderItems').value.trim();
+
+      const value = parseFloat(document.getElementById('orderValue').value);
+
+      const shippingType = document.getElementById('orderShippingType').value;
+
+      const status = document.getElementById('orderStatus').value;
+
+      const address = document.getElementById('orderAddress').value.trim();
+
+      const notes = document.getElementById('orderNotes').value.trim();
+
+
+
+      const orderData = {
+
+        clientName,
+
+        items,
+
+        value,
+
+        shippingType,
+
+        status,
+
+        address,
+
+        notes,
+
+        updatedAt: Date.now()
+
+      };
+
+
+
+      if(editId) {
+
+        await update(ref(db, `orders/${editId}`), orderData);
+
+      } else {
+
+        orderData.createdAt = Date.now();
+
+        await push(ref(db, 'orders'), orderData);
+
+      }
+
+
+
+      resetOrderForm();
+
+      alert('Pedido gravado com sucesso!');
+
+    });
+
+
+
+    window.updateOrderStatus = async function(id, newStatus) {
+
+      await update(ref(db, `orders/${id}`), { status: newStatus, updatedAt: Date.now() });
+
+    };
+
+
+
+    window.editOrder = function(id) {
+
+      const o = currentOrders[id];
+
+      if(!o) return;
+
+
+
+      document.getElementById('editOrderId').value = id;
+
+      document.getElementById('orderClientName').value = o.clientName;
+
+      document.getElementById('orderItems').value = o.items;
+
+      document.getElementById('orderValue').value = o.value;
+
+      document.getElementById('orderShippingType').value = o.shippingType || 'Entrega';
+
+      document.getElementById('orderStatus').value = o.status || 'pendente';
+
+      document.getElementById('orderAddress').value = o.address || '';
+
+      document.getElementById('orderNotes').value = o.notes || '';
+
+
+
+      document.getElementById('orderFormTitle').querySelector('span').innerHTML = '<i class="fa-solid fa-pen text-brand-gold mr-2"></i> Editar Registro de Pedido';
+
+      document.getElementById('btnCancelOrderEdit').classList.remove('hidden');
+
+    };
+
+
+
+    window.deleteOrder = async function(id) {
+
+      if(confirm('Tem certeza que deseja apagar este pedido?')) {
+
+        await remove(ref(db, `orders/${id}`));
+
+      }
+
+    };
+
+
+
+    window.resetOrderForm = function() {
+
+      document.getElementById('orderForm').reset();
+
+      document.getElementById('editOrderId').value = '';
+
+      document.getElementById('orderFormTitle').querySelector('span').innerHTML = '<i class="fa-solid fa-cart-plus text-brand-gold mr-2"></i> Novo Registro de Pedido';
+
+      document.getElementById('btnCancelOrderEdit').classList.add('hidden');
+
+    };
+
+  </script>
+
+</body>
+
+</html>
